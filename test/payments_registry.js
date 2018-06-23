@@ -47,6 +47,17 @@ contract('MockTransactionRegistry', function(accounts) {
 
         });
 
+        it("should throw if the owner sets the multiplier to be zero", async function() {
+
+            await assertRevert(transactionRegistry.setMultiplier(0, {from: accounts[0]}));
+
+        });
+
+        it("should throw if the owner sets the multiplier to be negative", async function() {
+
+            await assertRevert(transactionRegistry.setMultiplier(-1, {from: accounts[0]}));
+
+        });
 
     })
 

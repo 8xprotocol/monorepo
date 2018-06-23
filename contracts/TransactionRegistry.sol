@@ -35,10 +35,12 @@ contract TransactionRegistry is Authorizable {
       * proportional to the payments.
       * @param _amount is the multiplier that would like to be set.
     */
-
-    // solhint-disable-next-line
     function setMultiplier(uint _amount) public onlyOwner {
-        // @TODO: Implementation
+
+        // Ensure the multiplier is positive
+        require(_amount > 0);
+        multiplier = _amount;
+
     }
 
     /** @dev Create a new payment object when a user initially subscribes to a
