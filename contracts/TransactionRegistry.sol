@@ -34,10 +34,12 @@ contract TransactionRegistry is Authorizable {
     /** @dev Set a multiplier for how many tokens you need in order to claim proportional to the payments.
       * @param _amount is the multiplier that would like to be set.
     */
-
-    // solhint-disable-next-line
     function setMultiplier(uint _amount) public onlyOwner {
-        // @TODO: Implementation
+
+        // Ensure the multiplier is positive
+        require(_amount > 0);
+        multiplier = _amount;
+
     }
 
     /** @dev Create a new payment object when a user initially subscribes to a plan.
@@ -56,8 +58,22 @@ contract TransactionRegistry is Authorizable {
         returns (bool success)
     {
 
-        // @TODO: Implementation
-        return false;
+        require(_subscriptionIdentifier.length > 0);
+        require(_subscriptionContract != 0x0);
+        require(_amount > 0);
+        require(payments[_subscriptionIdentifier].subscriptionContract == 0x0);
+
+        Payment memory newPayment = Payment({
+            subscriptionContract: _subscriptionContract,
+            dueDate: _dueDate,
+            amount: _amount,
+            lastPaymentDate: 0,
+            claimant: 0x0,
+            executionPeriod: 0
+        });
+        payments[_subscriptionIdentifier] = newPayment;
+        emit PaymentCreated(_subscriptionIdentifier);
+        return true;
 
     }
 
